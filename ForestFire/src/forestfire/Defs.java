@@ -32,4 +32,7 @@ public class Defs {
     // Define the propability values
     public static final double PROBABILITY_F = 0.02;
     public static final double PROBABILITY_P = 0.01;
+    
+    // Define wheather to check for empty forrest
+    public static final boolean CHECK_FOR_EMPTY_FOREST = true;
 }

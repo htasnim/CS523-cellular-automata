@@ -23,6 +23,8 @@ public class Fire extends JFrame {
     private static final char BURNING = 'w'; //w looks like fire, right?
     private static final char TREE = 'T';
     private static final char EMPTY = '.';
+    private static boolean FOREST_EMPTY = false;
+    private static Integer longivity = -1;
     private List<String> land;
     private JPanel landPanel;
 
@@ -134,9 +136,21 @@ public class Fire extends JFrame {
         return land;
     }
 
+    boolean isEmptyForest(List<String> land) {
+        return false;
+    }
+
     public void processN(int n) {
+        FOREST_EMPTY = false;
         for (int i = 0; i < n; i++) {
             land = process(land);
+            if (Defs.CHECK_FOR_EMPTY_FOREST) {
+                if (isEmptyForest(land)) {
+                    FOREST_EMPTY = true;
+                    longivity = i;
+                    break;
+                }
+            }
             try {
                 Thread.sleep(750);
             } catch (InterruptedException e) {
