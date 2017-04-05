@@ -137,7 +137,14 @@ public class Fire extends JFrame {
     }
 
     boolean isEmptyForest(List<String> land) {
-        return false;
+        for (String currString : land) {
+            for (int i = 0; i < currString.length(); i++) {
+                if (currString.charAt(i) != EMPTY) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 
     public void processN(int n) {
