@@ -23,8 +23,9 @@ public class Fire extends JFrame {
     private static final char BURNING = 'w'; //w looks like fire, right?
     private static final char TREE = 'T';
     private static final char EMPTY = '.';
-    private static boolean FOREST_EMPTY = false;
-    private static Integer longivity = -1;
+    private boolean FOREST_EMPTY = false;
+    private Integer longivity = -1;
+    private double totalBiomass = 0;
     private List<String> land;
     private JPanel landPanel;
 
@@ -147,29 +148,58 @@ public class Fire extends JFrame {
         return true;
     }
 
-    public void processN(int n) {
+    int claculateBiomass(List<String> land) {
+        int biomass = 0;
+        for (String currString : land) {
+            for (int i = 0; i < currString.length(); i++) {
+                if (currString.charAt(i) != TREE) {
+                    biomass++;
+                }
+            }
+        }
+        return biomass;
+    }
+
+    public ForestStats processN(int n) {
         FOREST_EMPTY = false;
+        totalBiomass = 0;
         for (int i = 0; i < n; i++) {
             land = process(land);
             if (Defs.CHECK_FOR_EMPTY_FOREST) {
                 if (isEmptyForest(land)) {
                     FOREST_EMPTY = true;
-                    longivity = i;
                     break;
+                } else {
+                    int biomass = claculateBiomass(land);
+                    totalBiomass += biomass;
                 }
+                longivity = i;
             }
             try {
-                Thread.sleep(750);
+                Thread.sleep(1);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
             repaint();
         }
+
+        ForestStats forestStats = new ForestStats();
+        forestStats.setGrowth_rate(Defs.PROBABILITY_P);
+        forestStats.setLongivity(longivity);
+        forestStats.setBiomass(totalBiomass / (double) longivity);
+        return forestStats;
     }
 
     public static void main(String[] args) {
-        List<String> land = populate(Defs.GRID_WIDTH, Defs.GRID_HEIGHT);
-        Fire fire = new Fire(land);
-        fire.processN(Defs.NUMBER_OF_TIME_STEPS);
+        for (int i = 1; i <= 20; i++) {
+            Defs.PROBABILITY_P += 0.05;
+            System.out.println("Run " + i + ":");
+            List<String> land = populate(Defs.GRID_WIDTH, Defs.GRID_HEIGHT);
+            Fire fire = new Fire(land);
+            ForestStats forestStats = fire.processN(Defs.NUMBER_OF_TIME_STEPS);
+            System.out.println("Longivity :: " + forestStats.getLongivity());
+            System.out.println("Biamass :: " + forestStats.getBiomass());
+            System.out.println("Growth rate :: " + forestStats.getGrowth_rate() + "\n");
+        }
     }
 }

@@ -8,9 +8,8 @@ package forestfire;
 /**
  *
  * @author humayra
- * @description this is the definition class.
- * This class contains all the default values 
- * of the project. 
+ * @description this is the definition class. This class contains all the
+ * default values of the project.
  */
 public class Defs {
 
@@ -30,9 +29,9 @@ public class Defs {
     public static final int NUMBER_OF_TIME_STEPS = 5000;
 
     // Define the propability values
-    public static final double PROBABILITY_F = 0.02;
-    public static final double PROBABILITY_P = 0.01;
-    
+    public static final double PROBABILITY_F = 0.75;
+    public static double PROBABILITY_P = 0.00;
+
     // Define wheather to check for empty forrest
     public static final boolean CHECK_FOR_EMPTY_FOREST = true;
 }
