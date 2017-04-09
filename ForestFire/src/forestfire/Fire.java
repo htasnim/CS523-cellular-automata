@@ -11,6 +11,7 @@ package forestfire;
  */
 import java.awt.Color;
 import java.awt.Graphics;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,8 +29,18 @@ public class Fire extends JFrame {
     private double totalBiomass = 0;
     private List<String> land;
     private JPanel landPanel;
+    private List<ForestStats> forestStatsList;
+
+    void initGA() {
+        forestStatsList = new ArrayList<ForestStats>();
+        for (int i = 0; i < Defs.NUMBER_OF_INDIVIDUAL_IN_POPULATION; i++) {
+            ForestStats forestStats = new ForestStats();
+            forestStatsList.add(forestStats);
+        }
+    }
 
     public Fire(List<String> land) {
+        initGA();
         this.land = land;
         landPanel = new JPanel() {
             @Override
@@ -52,7 +63,7 @@ public class Fire extends JFrame {
                 }
             }
         };
-        //each block in the land is a 2x2 square
+        //each block in the land is a nxn square
         landPanel.setSize(this.land.get(0).length() * Defs.CELL_WIDTH, this.land.size() * Defs.CELL_HEIGHT);
         add(landPanel);
         setSize(Defs.WINDOW_WIDTH, Defs.WINDOW_HEIGHT);
@@ -184,22 +195,25 @@ public class Fire extends JFrame {
         }
 
         ForestStats forestStats = new ForestStats();
-        forestStats.setGrowth_rate(Defs.PROBABILITY_P);
+        forestStats.setGrowthRate1(Defs.PROBABILITY_P);
         forestStats.setLongivity(longivity);
         forestStats.setBiomass(totalBiomass / (double) longivity);
         return forestStats;
     }
 
     public static void main(String[] args) {
-        for (int i = 1; i <= 20; i++) {
-            Defs.PROBABILITY_P += 0.05;
-            System.out.println("Run " + i + ":");
-            List<String> land = populate(Defs.GRID_WIDTH, Defs.GRID_HEIGHT);
-            Fire fire = new Fire(land);
-            ForestStats forestStats = fire.processN(Defs.NUMBER_OF_TIME_STEPS);
-            System.out.println("Longivity :: " + forestStats.getLongivity());
-            System.out.println("Biamass :: " + forestStats.getBiomass());
-            System.out.println("Growth rate :: " + forestStats.getGrowth_rate() + "\n");
-        }
+
+//        for (int i = 1; i <= 20; i++) {
+//            Defs.PROBABILITY_P += 0.05;
+//            System.out.println("Run " + i + ":");
+//            List<String> land = populate(Defs.GRID_WIDTH, Defs.GRID_HEIGHT);
+//            Fire fire = new Fire(land);
+//            ForestStats forestStats = fire.processN(Defs.NUMBER_OF_TIME_STEPS);
+//            System.out.println("Longivity :: " + forestStats.getLongivity());
+//            System.out.println("Biomass :: " + forestStats.getBiomass());
+//            System.out.println("Growth rate :: " + forestStats.getGrowthRate1() + "\n");
+//        }
+        CelullarAutomata CA = new CelullarAutomata();
+        CA.run();
     }
 }

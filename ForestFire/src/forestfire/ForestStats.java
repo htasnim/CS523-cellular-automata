@@ -10,23 +10,24 @@ package forestfire;
  * @author humayra
  */
 public class ForestStats {
-    
-    private Double growth_rate;
+
+    private Double growthRate1;
+    private Double growthRate2;
     private Integer longivity;
     private Double biomass;
 
-    /**
-     * @return the growth_rate
-     */
-    public Double getGrowth_rate() {
-        return growth_rate;
+    public ForestStats() {
+        this.growthRate1 = Math.random();
+        this.growthRate2 = Math.random();
+        this.longivity = 0;
+        this.biomass = 0.0;
     }
 
-    /**
-     * @param growth_rate the growth_rate to set
-     */
-    public void setGrowth_rate(Double growth_rate) {
-        this.growth_rate = growth_rate;
+    public ForestStats(double growthRate1, double growthRate2) {
+        this.growthRate1 = growthRate1;
+        this.growthRate2 = growthRate2;
+        this.longivity = 0;
+        this.biomass = 0.0;
     }
 
     /**
@@ -56,5 +57,33 @@ public class ForestStats {
     public void setBiomass(Double biomass) {
         this.biomass = biomass;
     }
-    
+
+    /**
+     * @return the growthRate1
+     */
+    public Double getGrowthRate1() {
+        return growthRate1;
+    }
+
+    /**
+     * @param growthRate1 the growthRate1 to set
+     */
+    public void setGrowthRate1(Double growthRate1) {
+        this.growthRate1 = growthRate1;
+    }
+
+    /**
+     * @return the growthRate2
+     */
+    public Double getGrowthRate2() {
+        return growthRate2;
+    }
+
+    /**
+     * @param growthRate2 the growthRate2 to set
+     */
+    public void setGrowthRate2(Double growthRate2) {
+        this.growthRate2 = growthRate2;
+    }
+
 }
