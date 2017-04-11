@@ -17,8 +17,8 @@ public class ForestStats {
     private Double biomass;
 
     public ForestStats() {
-        this.growthRate1 = Math.random();
-        this.growthRate2 = Math.random();
+        this.growthRate1 = Utility.getRandomProbability();
+        this.growthRate2 = Utility.getRandomProbability();
         this.longivity = 0;
         this.biomass = 0.0;
     }

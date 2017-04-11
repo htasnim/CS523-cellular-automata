@@ -18,31 +18,34 @@ public class Defs {
     public static final int WINDOW_WIDTH = 500;
 
     // Define the dimension of the forest
-    public static final int GRID_HEIGHT = 50;
-    public static final int GRID_WIDTH = 50;
+    public static final int GRID_HEIGHT = 250;
+    public static final int GRID_WIDTH = 250;
 
     // Define the dimension of each cell in forest
     public static final int CELL_HEIGHT = 2;
     public static final int CELL_WIDTH = 2;
 
     // Define  total number of time steps
-    public static final int NUMBER_OF_TIME_STEPS = 100;
+    public static final int NUMBER_OF_TIME_STEPS = 1000;
 
     // Define the propability values
-    public static final double PROBABILITY_F = 0.85;
+    public static final double PROBABILITY_F = 0.001;
     public static double PROBABILITY_P = 0.00;
 
     // Define the parameters for GA
-    public static final Integer NUMBER_OF_GENERATIONS = 10;
-    public static final Integer NUMBER_OF_INDIVIDUAL_IN_POPULATION = 10;
+    public static final Integer NUMBER_OF_GENERATIONS = 5;
+    public static final Integer NUMBER_OF_INDIVIDUAL_IN_POPULATION = 20;
 
     // Define wheather to check for empty forrest
     public static final boolean CHECK_FOR_EMPTY_FOREST = true;
     public static final boolean USE_FIRE_FIGHTER = true;
-    public static final boolean USE_MULTIPLE_SPECIES = true;
+    public static final boolean USE_MULTIPLE_SPECIES = false;
     
     //Parameters for fire fighter
-    public static final Integer MAX_FIRE_FIGHTERS = 20;
-    public static final Integer FIRE_FIGHTERS_INCREMENT_RATE = 1;
-    public static final Integer MIN_FIRE_FIGHTERS = 1;
+    public static final Integer MAX_FIRE_FIGHTERS = 1000;
+    public static final Integer FIRE_FIGHTERS_INCREMENT_RATE = 50;
+    public static final Integer MIN_FIRE_FIGHTERS = 0;
+    
+    //Define running mode
+    public static final boolean DEBUG_MODE = false;
 }

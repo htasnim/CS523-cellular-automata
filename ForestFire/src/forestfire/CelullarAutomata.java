@@ -26,7 +26,7 @@ public class CelullarAutomata {
     private static final char FIRE_FIGHTER_WORKING = 'f';
     private ForestStats topForestStats;
 
-    void init() {
+    void initPopulation() {
 
         // Initialize the gnome of initial population
         forestStatsList = new ArrayList<ForestStats>();
@@ -34,7 +34,9 @@ public class CelullarAutomata {
             ForestStats forestStats = new ForestStats();
             forestStatsList.add(forestStats);
         }
+    }
 
+    void initForest() {
         // Initialize the forest in the begining
         land = new LinkedList<String>();
         for (int i = 0; i < Defs.GRID_HEIGHT; i++) {//height is just a copy anyway
@@ -57,15 +59,15 @@ public class CelullarAutomata {
                     if (Defs.USE_MULTIPLE_SPECIES == true) {
                         boolean species1 = false;
                         boolean species2 = false;
-                        species1 = Math.random() < forestStats.getGrowthRate1().doubleValue() ? true : false;
-                        species2 = Math.random() < forestStats.getGrowthRate2().doubleValue() ? true : false;
+                        species1 = Utility.getRandomProbability() < forestStats.getGrowthRate1().doubleValue() ? true : false;
+                        species2 = Utility.getRandomProbability() < forestStats.getGrowthRate2().doubleValue() ? true : false;
                         if (species1 == false && species2 == false) {
                             newRow += EMPTY;
                         } else {
                             newRow += TREE;
                         }
                     } else {
-                        newRow += Math.random() < forestStats.getLongivity() ? TREE : EMPTY;
+                        newRow += Utility.getRandomProbability() < forestStats.getGrowthRate1() ? TREE : EMPTY;
                     }
                     break;
                 case FIRE_FIGHTER_WORKING:
@@ -102,7 +104,7 @@ public class CelullarAutomata {
                             break;
                         }
                     }
-                    newRow += Math.random() < Defs.PROBABILITY_F ? BURNING : TREE;
+                    newRow += Utility.getRandomProbability() < Defs.PROBABILITY_F ? BURNING : TREE;
             }
         }
         return newRow;
@@ -175,7 +177,7 @@ public class CelullarAutomata {
         int biomass = 0;
         for (String currString : land) {
             for (int i = 0; i < currString.length(); i++) {
-                if (currString.charAt(i) != TREE) {
+                if (currString.charAt(i) == TREE) {
                     biomass++;
                 }
             }
@@ -190,18 +192,20 @@ public class CelullarAutomata {
         }
 
         for (int i = 0; i < Defs.NUMBER_OF_INDIVIDUAL_IN_POPULATION / 2; i++) {
-            newForestStatsList.add(new ForestStats(forestStatsList.get(i).getGrowthRate1(), forestStatsList.get(i).getGrowthRate2()));
+            //newForestStatsList.add(new ForestStats(forestStatsList.get(i).getGrowthRate1(), forestStatsList.get(i).getGrowthRate2()));
+            newForestStatsList.add(new ForestStats());
         }
 
         forestStatsList = newForestStatsList;
     }
 
     public void run() {
+        initPopulation();
         for (int i = 1; i <= Defs.NUMBER_OF_GENERATIONS.intValue(); i++) {
-            init();
             for (ForestStats currForestStats : forestStatsList) {
                 int longivity = 0;
                 double biomass = 0.0;
+                initForest();
                 for (int j = 1; j <= Defs.NUMBER_OF_TIME_STEPS; j++) {
                     runCAIteration(currForestStats);
                     longivity = j;
@@ -209,8 +213,22 @@ public class CelullarAutomata {
                     if (claculatenumberOfTrees() == 0) {
                         break;
                     }
+                    if (Defs.DEBUG_MODE) {
+                        System.out.println("After iteration " + j + ":");
+                    }
+                    for (String str : land) {
+                        if (Defs.DEBUG_MODE) {
+                            System.out.println(str);
+                        }
+                    }
+                    if (Defs.DEBUG_MODE) {
+                        System.out.println("Trees :" + claculatenumberOfTrees() + ", Biomass: " + biomass);
+                    }
                 }
                 biomass /= (double) longivity;
+                if (Defs.DEBUG_MODE) {
+                    System.out.println("Biomass after all iterations: " + biomass);
+                }
                 currForestStats.setBiomass(biomass);
                 currForestStats.setLongivity(longivity);
             }
@@ -234,6 +252,7 @@ public class CelullarAutomata {
             for (int numberOfFireFighter = Defs.MIN_FIRE_FIGHTERS; numberOfFireFighter <= Defs.MAX_FIRE_FIGHTERS; numberOfFireFighter += Defs.FIRE_FIGHTERS_INCREMENT_RATE) {
                 int longivity = 0;
                 double biomass = 0.0;
+                initForest();
                 for (int j = 1; j <= Defs.NUMBER_OF_TIME_STEPS; j++) {
                     List<CellPosition> burningTreePositionList = getBurningTreeList();
                     Collections.shuffle(burningTreePositionList);

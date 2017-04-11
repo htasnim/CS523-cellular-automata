@@ -8,6 +8,7 @@ package forestfire;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
 
 /**
  *
@@ -21,10 +22,13 @@ public class Utility {
         Collections.sort(forestStatsList, new Comparator<ForestStats>() {
             @Override
             public int compare(ForestStats o1, ForestStats o2) {
-                return o1.getBiomass()> o2.getBiomass()? -1 : 1;
+                return o1.getBiomass() > o2.getBiomass() ? -1 : 1;
             }
         });
         return forestStatsList;
     }
 
+    public static Double getRandomProbability() {
+        return new Random().nextDouble();
+    }
 }
