@@ -131,12 +131,11 @@ public class CelullarAutomata {
 
     List<CellPosition> getBurningTreeList() {
         List<CellPosition> positionList = new ArrayList<CellPosition>();
-        List<CellPosition> allTreePosition = new ArrayList<CellPosition>();
         int i = 0;
         for (String currString : land) {
             for (int j = 0; j < currString.length(); j++) {
-                if (currString.charAt(i) != BURNING) {
-                    allTreePosition.add(new CellPosition(i, j));
+                if (currString.charAt(j) == BURNING) {
+                    positionList.add(new CellPosition(i, j));
                 }
             }
             i++;
@@ -177,7 +176,7 @@ public class CelullarAutomata {
         int biomass = 0;
         for (String currString : land) {
             for (int i = 0; i < currString.length(); i++) {
-                if (currString.charAt(i) == TREE) {
+                if (currString.charAt(i) == TREE || currString.charAt(i) == RESCUED || currString.charAt(i) == FIRE_FIGHTER_WORKING) {
                     biomass++;
                 }
             }
@@ -249,27 +248,53 @@ public class CelullarAutomata {
 
         topForestStats = forestStatsList.get(0);
         if (Defs.USE_FIRE_FIGHTER == true) {
+            if (Defs.DEBUG_MODE) {
+                System.out.println("***************** FIRE FIGHTER STARTS *****************");
+            }
             for (int numberOfFireFighter = Defs.MIN_FIRE_FIGHTERS; numberOfFireFighter <= Defs.MAX_FIRE_FIGHTERS; numberOfFireFighter += Defs.FIRE_FIGHTERS_INCREMENT_RATE) {
                 int longivity = 0;
                 double biomass = 0.0;
                 initForest();
                 for (int j = 1; j <= Defs.NUMBER_OF_TIME_STEPS; j++) {
                     List<CellPosition> burningTreePositionList = getBurningTreeList();
+                    if (Defs.DEBUG_MODE) {
+                        for (CellPosition cp : burningTreePositionList) {
+                            System.out.println("X: " + cp.getX() + ", Y: " + cp.getY());
+                        }
+                    }
                     Collections.shuffle(burningTreePositionList);
+                    if (Defs.DEBUG_MODE) {
+                        System.out.println("After shuffle: ");
+                        for (CellPosition cp : burningTreePositionList) {
+                            System.out.println("X: " + cp.getX() + ", Y: " + cp.getY());
+                        }
+                    }
                     int k = 0;
                     for (CellPosition burningTree : burningTreePositionList) {
                         k++;
                         if (k > numberOfFireFighter) {
                             break;
                         }
-                        String currRow = land.get(burningTree.getX());
-                        StringBuilder sb = new StringBuilder(currRow);
-                        sb.setCharAt(burningTree.getY(), FIRE_FIGHTER_WORKING);
-                        land.set(burningTree.getX(), sb.toString());
+                        String newRow = land.get(burningTree.getX()).substring(0, burningTree.getY()) + FIRE_FIGHTER_WORKING + land.get(burningTree.getX()).substring(burningTree.getY() + 1);
+                        if (Defs.DEBUG_MODE) {
+                            System.out.println("New string: " + newRow);
+                        }
+                        land.set(burningTree.getX(), newRow);
                     }
                     runCAIteration(topForestStats);
                     longivity = j;
                     biomass += (double) claculatenumberOfTrees() / (double) (Defs.GRID_WIDTH * Defs.GRID_HEIGHT);
+                    if (Defs.DEBUG_MODE) {
+                        System.out.println("After iteration " + j + ":");
+                    }
+                    for (String str : land) {
+                        if (Defs.DEBUG_MODE) {
+                            System.out.println(str);
+                        }
+                    }
+                    if (Defs.DEBUG_MODE) {
+                        System.out.println("Trees :" + claculatenumberOfTrees() + ", Biomass: " + biomass);
+                    }
                     if (claculatenumberOfTrees() == 0) {
                         break;
                     }
