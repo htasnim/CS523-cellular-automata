@@ -40,4 +40,9 @@ public class Defs {
     public static final boolean CHECK_FOR_EMPTY_FOREST = true;
     public static final boolean USE_FIRE_FIGHTER = true;
     public static final boolean USE_MULTIPLE_SPECIES = true;
+    
+    //Parameters for fire fighter
+    public static final Integer MAX_FIRE_FIGHTERS = 20;
+    public static final Integer FIRE_FIGHTERS_INCREMENT_RATE = 1;
+    public static final Integer MIN_FIRE_FIGHTERS = 1;
 }

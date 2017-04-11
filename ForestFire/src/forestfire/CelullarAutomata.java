@@ -231,44 +231,38 @@ public class CelullarAutomata {
 
         topForestStats = forestStatsList.get(0);
         if (Defs.USE_FIRE_FIGHTER == true) {
-            for (int numberOfFireFighter = 50; numberOfFireFighter <= 1000; numberOfFireFighter += 50) {
-                for (ForestStats currForestStats : forestStatsList) {
-                    int longivity = 0;
-                    double biomass = 0.0;
-                    for (int j = 1; j <= Defs.NUMBER_OF_TIME_STEPS; j++) {
-                        List<CellPosition> burningTreePositionList = getBurningTreeList();
-                        Collections.shuffle(burningTreePositionList);
-                        int k = 0;
-                        for (CellPosition burningTree : burningTreePositionList) {
-                            k++;
-                            if (k > numberOfFireFighter) {
-                                break;
-                            }
-                            String currRow = land.get(burningTree.getX());
-                            StringBuilder sb = new StringBuilder(currRow);
-                            sb.setCharAt(burningTree.getY(), FIRE_FIGHTER_WORKING);
-                            land.set(burningTree.getX(), sb.toString());
-                        }
-                        runCAIteration(currForestStats);
-                        longivity = j;
-                        biomass += (double) claculatenumberOfTrees() / (double) (Defs.GRID_WIDTH * Defs.GRID_HEIGHT);
-                        if (claculatenumberOfTrees() == 0) {
+            for (int numberOfFireFighter = Defs.MIN_FIRE_FIGHTERS; numberOfFireFighter <= Defs.MAX_FIRE_FIGHTERS; numberOfFireFighter += Defs.FIRE_FIGHTERS_INCREMENT_RATE) {
+                int longivity = 0;
+                double biomass = 0.0;
+                for (int j = 1; j <= Defs.NUMBER_OF_TIME_STEPS; j++) {
+                    List<CellPosition> burningTreePositionList = getBurningTreeList();
+                    Collections.shuffle(burningTreePositionList);
+                    int k = 0;
+                    for (CellPosition burningTree : burningTreePositionList) {
+                        k++;
+                        if (k > numberOfFireFighter) {
                             break;
                         }
+                        String currRow = land.get(burningTree.getX());
+                        StringBuilder sb = new StringBuilder(currRow);
+                        sb.setCharAt(burningTree.getY(), FIRE_FIGHTER_WORKING);
+                        land.set(burningTree.getX(), sb.toString());
                     }
-                    biomass /= (double) longivity;
-                    currForestStats.setBiomass(biomass);
-                    currForestStats.setLongivity(longivity);
+                    runCAIteration(topForestStats);
+                    longivity = j;
+                    biomass += (double) claculatenumberOfTrees() / (double) (Defs.GRID_WIDTH * Defs.GRID_HEIGHT);
+                    if (claculatenumberOfTrees() == 0) {
+                        break;
+                    }
                 }
+                biomass /= (double) longivity;
                 System.out.println("Results after using fire fighter " + numberOfFireFighter + ":");
                 System.out.println("Biomass results   Longivity results       GR1              GR2");
                 DecimalFormat df = new DecimalFormat("#.###");
-                for (ForestStats fs : forestStatsList) {
-                    System.out.println(" " + df.format(fs.getBiomass())
-                            + "                  " + fs.getLongivity()
-                            + "             " + df.format(fs.getGrowthRate1())
-                            + "             " + df.format(fs.getGrowthRate2()));
-                }
+                System.out.println(" " + df.format(biomass)
+                        + "                  " + longivity
+                        + "             " + df.format(topForestStats.getGrowthRate1())
+                        + "             " + df.format(topForestStats.getGrowthRate2()));
             }
         }
 
