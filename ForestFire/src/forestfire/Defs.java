@@ -38,13 +38,17 @@ public class Defs {
 
     // Define wheather to check for empty forrest
     public static final boolean CHECK_FOR_EMPTY_FOREST = true;
-    public static final boolean USE_FIRE_FIGHTER = true;
+    public static final boolean USE_FIRE_FIGHTER = false;
     public static final boolean USE_MULTIPLE_SPECIES = false;
 
     //Parameters for fire fighter
     public static final Integer MAX_FIRE_FIGHTERS = 1000;
     public static final Integer FIRE_FIGHTERS_INCREMENT_RATE = 50;
     public static final Integer MIN_FIRE_FIGHTERS = 0;
+
+    //Define the parameters of GA
+    public static final Double MUTATION_RATE = 0.5;
+    public static final Integer NUMBER_OF_ELITE_INDIVIDUAL = 2;
 
     //Define running mode
     public static final boolean DEBUG_MODE = false;

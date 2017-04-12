@@ -191,8 +191,25 @@ public class CelullarAutomata {
         }
 
         for (int i = 0; i < Defs.NUMBER_OF_INDIVIDUAL_IN_POPULATION / 2; i++) {
-            //newForestStatsList.add(new ForestStats(forestStatsList.get(i).getGrowthRate1(), forestStatsList.get(i).getGrowthRate2()));
-            newForestStatsList.add(new ForestStats());
+            int randomInt = Utility.getRandomInteger(0, (Defs.NUMBER_OF_INDIVIDUAL_IN_POPULATION / 2) - 1);
+            newForestStatsList.add(new ForestStats(forestStatsList.get(randomInt).getGrowthRate1(), forestStatsList.get(randomInt).getGrowthRate2()));
+        }
+
+        forestStatsList = newForestStatsList;
+    }
+
+    void mutation() {
+        List<ForestStats> newForestStatsList = new ArrayList<ForestStats>();
+        for (int i = 0; i < Defs.NUMBER_OF_ELITE_INDIVIDUAL; i++) {
+            newForestStatsList.add(new ForestStats(forestStatsList.get(i).getGrowthRate1(), forestStatsList.get(i).getGrowthRate2()));
+        }
+
+        for (int i = Defs.NUMBER_OF_ELITE_INDIVIDUAL; i < Defs.NUMBER_OF_INDIVIDUAL_IN_POPULATION; i++) {
+            if (Utility.getRandomProbability() < Defs.MUTATION_RATE) {
+                newForestStatsList.add(new ForestStats());
+            } else {
+                newForestStatsList.add(new ForestStats(forestStatsList.get(i).getGrowthRate1(), forestStatsList.get(i).getGrowthRate2()));
+            }
         }
 
         forestStatsList = newForestStatsList;
@@ -244,6 +261,7 @@ public class CelullarAutomata {
 
             System.out.println("");
             selection();
+            mutation();
         }
 
         topForestStats = forestStatsList.get(0);

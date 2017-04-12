@@ -31,4 +31,8 @@ public class Utility {
     public static Double getRandomProbability() {
         return new Random().nextDouble();
     }
+
+    public static Integer getRandomInteger(int startRange, int endRange) {
+        return startRange + (int) (Math.random() * ((endRange - startRange) + 1));
+    }
 }
